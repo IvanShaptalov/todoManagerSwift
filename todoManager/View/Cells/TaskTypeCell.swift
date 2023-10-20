@@ -1,5 +1,5 @@
 //
-//  TaskViewCell.swift
+//  TaskTypeCell.swift
 //  todoManager
 //
 //  Created by van on 20.10.2023.
@@ -7,11 +7,11 @@
 
 import UIKit
 
-class TaskViewCell: UITableViewCell {
+class TaskTypeCell: UITableViewCell {
     
-    @IBOutlet var symbol: UILabel!
+    @IBOutlet var typeTitle: UILabel!
     
-    @IBOutlet var title: UILabel!
+    @IBOutlet var typeDescription: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

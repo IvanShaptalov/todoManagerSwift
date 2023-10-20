@@ -9,6 +9,18 @@ import UIKit
 
 class TaskListController: UITableViewController {
     
+    // MARK: segue data transfer
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toCreateScreen" {
+            let destination = segue.destination as! TaskEditController
+            destination.doAfterEdit = {[unowned self] title, type, status in
+                let newTask = Task(title: title, type: type, status: status)
+                
+                tasks[type]?.append(newTask)
+            }
+        }
+    }
+    
     var tasksStorage: TasksStorageProtocol = TasksStorage()
     
     var tasks: [TaskPriority: [TaskProtocol]] = [:] {
@@ -56,31 +68,44 @@ class TaskListController: UITableViewController {
     
     // MARK: Set task to "Planned"
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        // get data from task, which needs to change status to "planned"
-        
+        // получаем данные о задаче, по которой осуществлен свайп
         let taskType = sectionsTypesPosition[indexPath.section]
-        
         guard let _ = tasks[taskType]?[indexPath.row] else {
-            return nil
-        }
-        
-        // check that task status is "completed"
-        
-        guard tasks[taskType]![indexPath.row].status == .completed else {
-            return nil
-        }
-        
-        // change status
-        
-        let actionSwipeInstance = UIContextualAction(style: .normal, title: "To planned") {_,_,_ in
+            return nil }
+        // действие для изменения статуса на "запланирована"
+        let actionSwipeInstance = UIContextualAction(style: .normal, title: "Not completed") { _,_,_ in
             self.tasks[taskType]![indexPath.row].status = .planned
             self.tableView.reloadSections(IndexSet(arrayLiteral: indexPath.section), with: .automatic)
         }
-        
-        // return configured object
-        
-        return UISwipeActionsConfiguration(actions: [actionSwipeInstance])
-    }
+        // действие для перехода к экрану редактирования
+        let actionEditInstance = UIContextualAction(style: .normal, title: "Change") { _,_,_ in
+            // загрузка сцены со storyboard
+            let editScreen = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TaskEditController111") as! TaskEditController
+            // передача значений редактируемой задачи
+            editScreen.taskText = self.tasks[taskType]![indexPath.row].title
+            editScreen.taskType = self.tasks[taskType]![indexPath.row].type
+            editScreen.taskStatus = self.tasks[taskType]![indexPath.row].status
+            // передача обработчика для сохранения задачи
+            editScreen.doAfterEdit = { [self] title, type, status in
+                let editedTask = Task(title: title, type: type, status: status)
+                tasks[taskType]![indexPath.row] = editedTask
+                tableView.reloadData()
+            }
+            
+            // переход к экрану редактирования
+            self.navigationController?.pushViewController(editScreen, animated: true)
+        }
+        // изменяем цвет фона кнопки с действием
+        actionEditInstance.backgroundColor = .darkGray
+        // создаем объект, описывающий доступные действия
+        // в зависимости от статуса задачи будет отображено 1 или 2 действия
+        let actionsConfiguration: UISwipeActionsConfiguration
+        if tasks[taskType]![indexPath.row].status == .completed {
+            actionsConfiguration = UISwipeActionsConfiguration(actions: [actionSwipeInstance, actionEditInstance])
+        } else {
+            actionsConfiguration = UISwipeActionsConfiguration(actions:
+                                                                [actionEditInstance]) }
+        return actionsConfiguration }
     
     // MARK: Delete Task
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -131,14 +156,14 @@ class TaskListController: UITableViewController {
         loadTasks()
         
         navigationItem.leftBarButtonItem = editButtonItem
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-
+    
     // MARK: - Table view data source
     
     private func loadTasks(){
@@ -175,12 +200,12 @@ class TaskListController: UITableViewController {
         return cell
         
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return tasks.count
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         let taskType = sectionsTypesPosition[section]
@@ -251,48 +276,48 @@ class TaskListController: UITableViewController {
         return resultSymbol
     }
     /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
+     // Override to support conditional editing of the table view.
+     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
+    
     /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
+     // Override to support editing the table view.
+     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+     if editingStyle == .delete {
+     // Delete the row from the data source
+     tableView.deleteRows(at: [indexPath], with: .fade)
+     } else if editingStyle == .insert {
+     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     }
+     }
+     */
+    
     /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
+     // Override to support rearranging the table view.
+     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+     
+     }
+     */
+    
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
