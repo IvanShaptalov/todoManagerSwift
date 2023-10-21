@@ -17,6 +17,14 @@ class TaskListController: UITableViewController {
                 let newTask = Task(title: title, type: type, status: status)
                 
                 tasks[type]?.append(newTask)
+                
+                var allTasks: [TaskProtocol] = []
+                allTasks += tasks[TaskPriority.important] ?? []
+                allTasks += tasks[TaskPriority.normal] ?? []
+                
+                tasks[TaskPriority.important] = allTasks.filter({$0.type == .important})
+                
+                tasks[TaskPriority.normal] = allTasks.filter({$0.type == .normal})
             }
         }
     }
@@ -38,14 +46,6 @@ class TaskListController: UITableViewController {
     var tasks: [TaskPriority: [TaskProtocol]] = [:] {
         didSet {
             
-            var allTasks: [TaskProtocol] = []
-            allTasks += tasks[TaskPriority.important] ?? []
-            allTasks += tasks[TaskPriority.normal] ?? []
-            
-            tasks[TaskPriority.important] = allTasks.filter({$0.type == .important})
-            
-            tasks[TaskPriority.normal] = allTasks.filter({$0.type == .normal})
-            
             // MARK: Apple MVC sort practice to weak connection to Model TaskStatus
             for (tasksGroupPriority, tasksGroup) in tasks {
                 tasks[tasksGroupPriority] = tasksGroup.sorted {task1, task2 in
@@ -63,8 +63,8 @@ class TaskListController: UITableViewController {
             
             
             
-
-
+            
+            
             
             
             var savingArray: [TaskProtocol] = []
@@ -76,7 +76,7 @@ class TaskListController: UITableViewController {
             tasksStorage.saveTasks(savingArray)
             
             tableView.reloadData()
-
+            
         }
     }
     
@@ -131,6 +131,15 @@ class TaskListController: UITableViewController {
             editScreen.doAfterEdit = { [self] title, type, status in
                 let editedTask = Task(title: title, type: type, status: status)
                 tasks[taskType]![indexPath.row] = editedTask
+                
+                var allTasks: [TaskProtocol] = []
+                allTasks += tasks[TaskPriority.important] ?? []
+                allTasks += tasks[TaskPriority.normal] ?? []
+                
+                tasks[TaskPriority.important] = allTasks.filter({$0.type == .important})
+                
+                tasks[TaskPriority.normal] = allTasks.filter({$0.type == .normal})
+                
                 tableView.reloadData()
             }
             
@@ -156,11 +165,14 @@ class TaskListController: UITableViewController {
         let taskType = sectionsTypesPosition[indexPath.section]
         
         // 2. remove task with selected "taskType" in table section
+        print(indexPath.row)
         tasks[taskType]?.remove(at: indexPath.row)
         
         // 3. remove task from table view
-        tableView.deleteRows(at: [indexPath], with: .automatic)
+        // tableView.deleteRows(at: [indexPath], with: .automatic)
         
+        
+        print("deleted")
     }
     
     // MARK: Move rows
