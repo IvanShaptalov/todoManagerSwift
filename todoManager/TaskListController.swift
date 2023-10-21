@@ -33,8 +33,19 @@ class TaskListController: UITableViewController {
     
     var tasksStorage: TasksStorageProtocol = TasksStorage()
     
+    
+    
     var tasks: [TaskPriority: [TaskProtocol]] = [:] {
         didSet {
+            
+            var allTasks: [TaskProtocol] = []
+            allTasks += tasks[TaskPriority.important] ?? []
+            allTasks += tasks[TaskPriority.normal] ?? []
+            
+            tasks[TaskPriority.important] = allTasks.filter({$0.type == .important})
+            
+            tasks[TaskPriority.normal] = allTasks.filter({$0.type == .normal})
+            
             // MARK: Apple MVC sort practice to weak connection to Model TaskStatus
             for (tasksGroupPriority, tasksGroup) in tasks {
                 tasks[tasksGroupPriority] = tasksGroup.sorted {task1, task2 in
@@ -46,6 +57,14 @@ class TaskListController: UITableViewController {
                 }
             }
             
+            
+            // check that normat task not exist in important section
+            
+            
+            
+            
+
+
             
             
             var savingArray: [TaskProtocol] = []
