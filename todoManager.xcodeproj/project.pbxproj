@@ -18,6 +18,7 @@
 		2155A9532AE02707005D730C /* TaskListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2155A9522AE02707005D730C /* TaskListController.swift */; };
 		2155A9572AE027ED005D730C /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2155A9562AE027ED005D730C /* Task.swift */; };
 		2155A95A2AE0291A005D730C /* TasksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2155A9592AE0291A005D730C /* TasksStorage.swift */; };
+		21807A6B2AE4271B008689A3 /* ConnectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21807A6A2AE4271B008689A3 /* ConnectionProtocol.swift */; };
 		21867A7E2AE2BAC600C10650 /* TaskTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21867A7C2AE2BAC600C10650 /* TaskTypeCell.swift */; };
 		21867A7F2AE2BAC600C10650 /* TaskTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21867A7D2AE2BAC600C10650 /* TaskTypeCell.xib */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		2155A9522AE02707005D730C /* TaskListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListController.swift; sourceTree = "<group>"; };
 		2155A9562AE027ED005D730C /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		2155A9592AE0291A005D730C /* TasksStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksStorage.swift; sourceTree = "<group>"; };
+		21807A6A2AE4271B008689A3 /* ConnectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionProtocol.swift; sourceTree = "<group>"; };
 		21867A7C2AE2BAC600C10650 /* TaskTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTypeCell.swift; sourceTree = "<group>"; };
 		21867A7D2AE2BAC600C10650 /* TaskTypeCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTypeCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +76,7 @@
 				2155A9552AE027DA005D730C /* Model */,
 				2155A9382AE025F5005D730C /* AppDelegate.swift */,
 				2155A93A2AE025F5005D730C /* SceneDelegate.swift */,
+				21807A6A2AE4271B008689A3 /* ConnectionProtocol.swift */,
 				2155A93E2AE025F5005D730C /* Main.storyboard */,
 				212E9D2C2AE2997A008B43EE /* TaskEditController.swift */,
 				2155A9522AE02707005D730C /* TaskListController.swift */,
@@ -192,6 +195,7 @@
 				2155A9532AE02707005D730C /* TaskListController.swift in Sources */,
 				212E9D2D2AE2997A008B43EE /* TaskEditController.swift in Sources */,
 				21867A7E2AE2BAC600C10650 /* TaskTypeCell.swift in Sources */,
+				21807A6B2AE4271B008689A3 /* ConnectionProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

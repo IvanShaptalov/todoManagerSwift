@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TaskTypeController: UITableViewController {
+class TaskTypeController: UITableViewController, TaskCreatorProtocol {
     
     // MARK: closure to edit TASK TYPE
     var doAfterTypeSelected: ((TaskPriority) -> Void)?

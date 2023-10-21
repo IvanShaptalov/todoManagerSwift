@@ -7,12 +7,12 @@
 
 import UIKit
 
-class TaskListController: UITableViewController {
+class TaskListController: UITableViewController, TaskSetterProtocol {
     
     // MARK: segue data transfer
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCreateScreen" {
-            let destination = segue.destination as! TaskEditController
+            let destination = segue.destination as! TaskEditorProtocol
             destination.doAfterEdit = {[self] title, type, status in
                 let newTask = Task(title: title, type: type, status: status)
                 
@@ -122,7 +122,7 @@ class TaskListController: UITableViewController {
         // действие для перехода к экрану редактирования
         let actionEditInstance = UIContextualAction(style: .normal, title: "Change") { _,_,_ in
             // загрузка сцены со storyboard
-            let editScreen = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TaskEditController111") as! TaskEditController
+            let editScreen = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TaskEditController111") as! TaskEditorProtocol
             // передача значений редактируемой задачи
             editScreen.taskText = self.tasks[taskType]![indexPath.row].title
             editScreen.taskType = self.tasks[taskType]![indexPath.row].type
@@ -144,7 +144,7 @@ class TaskListController: UITableViewController {
             }
             
             // переход к экрану редактирования
-            self.navigationController?.pushViewController(editScreen, animated: true)
+            self.navigationController?.pushViewController(editScreen as! UIViewController, animated: true)
         }
         // изменяем цвет фона кнопки с действием
         actionEditInstance.backgroundColor = .darkGray

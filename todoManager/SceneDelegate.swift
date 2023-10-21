@@ -25,21 +25,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tasks = TasksStorage().loadTasks()
         
-        let taskListController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TaskListController" ) as! TaskListController
+        let taskListController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TaskListController" ) as! TaskSetterProtocol
         
         taskListController.setTasks(tasks)
         
-        let navigationController = UINavigationController(rootViewController: taskListController)
+        let navigationController = UINavigationController(rootViewController: taskListController as! UIViewController)
         
         self.window?.windowScene = windowScene
         
         window.rootViewController = navigationController
         
         window.makeKeyAndVisible()
-        
-        
-        
-        
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
