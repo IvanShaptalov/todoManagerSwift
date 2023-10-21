@@ -13,11 +13,21 @@ class TaskListController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCreateScreen" {
             let destination = segue.destination as! TaskEditController
-            destination.doAfterEdit = {[unowned self] title, type, status in
+            destination.doAfterEdit = {[self] title, type, status in
                 let newTask = Task(title: title, type: type, status: status)
                 
                 tasks[type]?.append(newTask)
             }
+        }
+    }
+    
+    func setTasks(_ tasksCollection: [TaskProtocol]) {
+        sectionsTypesPosition.forEach{
+            taskType in tasks[taskType] = []
+        }
+        
+        tasksCollection.forEach{
+            task in tasks[task.type]?.append(task)
         }
     }
     
@@ -35,6 +45,19 @@ class TaskListController: UITableViewController {
                     return task1position < task2position
                 }
             }
+            
+            
+            
+            var savingArray: [TaskProtocol] = []
+            tasks.forEach { _, value in
+                savingArray += value
+                
+            }
+            
+            tasksStorage.saveTasks(savingArray)
+            
+            tableView.reloadData()
+
         }
     }
     
